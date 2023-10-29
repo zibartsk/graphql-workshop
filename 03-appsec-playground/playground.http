@@ -1,0 +1,85 @@
+# curl 'https://cloudinfra-gw.portal.checkpoint.com/app/i2//graphql/V1' \
+#   -H 'authority: cloudinfra-gw.portal.checkpoint.com' \
+#   -H 'accept: */*' \
+#   -H 'accept-language: en-US,en;q=0.8' \
+#   -H 'appsec-allow-request: c0dd660e-c35a-42a0-b7bd-e2a0449d5a61' \
+#   -H 'cache-control: no-cache' \
+#   -H 'content-type: application/json' \
+#   -H 'origin: https://portal.checkpoint.com' \
+#   -H 'pragma: no-cache' \
+#   -H 'referer: https://portal.checkpoint.com/' \
+#   -H 'sec-ch-ua: "Chromium";v="118", "Brave";v="118", "Not=A?Brand";v="99"' \
+#   -H 'sec-ch-ua-mobile: ?0' \
+#   -H 'sec-ch-ua-platform: "macOS"' \
+#   -H 'sec-fetch-dest: empty' \
+#   -H 'sec-fetch-mode: cors' \
+#   -H 'sec-fetch-site: same-site' \
+#   -H 'sec-gpc: 1' \
+#   -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36' \
+#   --data-raw '{"query":"\nquery ExampleQuery {\n  getAssets {\n    status\n      assets {\n        id\n        name\n      }\n  }\n}\n","variables":null,"operationName":"ExampleQuery"}' \
+#   --compressed
+
+POST https://cloudinfra-gw.portal.checkpoint.com/app/i2//graphql/V1 HTTP/1.1
+Host: cloudinfra-gw.portal.checkpoint.com
+Authorization: Bearer aaa
+Content-Type: application/json
+
+{"query":"\nquery ExampleQuery {\n  getAssets {\n    status\n      assets {\n        id\n        name\n      }\n  }\n}\n","variables":null,"operationName":"ExampleQuery"}
+
+###
+# @name login
+
+#
+# 
+# data "http" "login" {
+#   url    = "https://cloudinfra-gw.portal.checkpoint.com/auth/external"
+#   method = "POST"
+#   request_body = jsonencode({
+#     clientId  = var.appsec-client-id
+#     accessKey = var.appsec-client-secret
+#   })
+#   request_headers = {
+#     "content-type" = "application/json"
+#   }
+# }
+
+# locals {
+#   token = jsondecode(data.http.login.response_body)["data"]["token"]
+# }
+
+@apiKey={{$dotenv APPSEC_API_KEY}}
+@apiKeySecret={{$dotenv APPSEC_API_KEY_SECRET}}
+
+// https://github.com/mkol5222/appsec-publish-tf/blob/main/publish.tf#L4C1-L18C2
+POST https://cloudinfra-gw.portal.checkpoint.com/auth/external
+Content-Type: application/json
+
+{"clientId":"{{apiKey}}","accessKey":"{{apiKeySecret}}"}
+
+
+
+###
+@token = {{login.response.body.data.token}}
+POST https://cloudinfra-gw.portal.checkpoint.com/app/i2//graphql/V1 HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query ExampleQuery {
+  getAssets(userDefined:true) {
+    status
+      assets {
+        id
+        name 
+        assetType
+      }
+  }
+}
+
+###
+
+POST https://cloudinfra-gw.portal.checkpoint.com/app/i2//graphql/V1 HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "query": "mutation {\n publishChanges {\n isValid\n errors {\n id type subType name message \n }\n warnings {\n id type subType name message\n }\n }\n }" }
