@@ -1,4 +1,4 @@
-#!/usr/bin/env deno run --watch --allow-net
+#!/usr/bin/env -S deno run --watch --allow-net
 
 import { createSchema, createYoga } from 'graphql-yoga'
 import { serve } from 'https://deno.land/std@0.157.0/http/server.ts'
