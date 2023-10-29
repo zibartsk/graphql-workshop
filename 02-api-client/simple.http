@@ -1,0 +1,67 @@
+POST http://0.0.0.0:8000/graphql
+Content-Type: application/json
+Authorization: Bearer xxx
+X-REQUEST-TYPE: GraphQL
+
+{ 
+  helloWorld
+}
+
+###
+POST http://0.0.0.0:8000/graphql
+Content-Type: application/json
+Authorization: Bearer xxx
+
+{ 
+  "query": "{ helloWorld }"
+}
+
+###
+# curl 'http://0.0.0.0:8000/graphql' \
+#   -H 'Accept-Language: en-US,en' \
+#   -H 'Cache-Control: no-cache' \
+#   -H 'Connection: keep-alive' \
+#   -H 'Origin: http://0.0.0.0:8000' \
+#   -H 'Pragma: no-cache' \
+#   -H 'Referer: http://0.0.0.0:8000/graphql?query=%7B+%0A++helloWorld%0A%7D' \
+#   -H 'Sec-GPC: 1' \
+#   -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36' \
+#   -H 'accept: application/graphql-response+json, application/json, multipart/mixed' \
+#   -H 'content-type: application/json' \
+#   --data-raw '{"query":"{\n  helloWorld\n}","extensions":{}}' \
+#   --compressed \
+#   --insecure
+
+POST http://0.0.0.0:8000/graphql
+Content-Type: application/json
+
+{ 
+  "query": "{ helloWorld }"
+}
+
+###
+
+POST http://0.0.0.0:8000/graphql
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+{
+  hello(name: "Space")
+}
+
+###
+# @name hello
+POST http://0.0.0.0:8000/graphql
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query hello($name: String!) {
+  hello(name: $name)
+}
+
+{
+  "name": "World1"
+}
+
+###
+@response = {{hello.response.body.data.hello}}
