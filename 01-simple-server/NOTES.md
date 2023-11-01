@@ -53,3 +53,5 @@ const resolvers = {
 export { resolvers };
 
 ```
+
+Next step: implement client for your GraphQL API service.
