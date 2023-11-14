@@ -1,0 +1,65 @@
+POST http://127.0.0.1:8000/graphql
+Content-Type: application/json
+
+{ "query": "{ helloWorld }"}
+
+###
+
+POST http://127.0.0.1:8000/graphql
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+{
+    helloWorld
+}
+
+###
+POST http://127.0.0.1:8000/graphql
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+{
+    minus(a:20, b:10)
+}
+
+###
+POST http://127.0.0.1:8000/graphql
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query calcForMe($first: Int!, $b: Int!){
+    minus(a:$first, b:$b)
+    helloWorld
+}
+
+{
+    "first": 100,
+    "b": 10
+}
+
+###
+
+POST https://www.seznam.cz/api/v2/graphql
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+                query fetchRadioItems {
+                    sources(type: radio) {
+                        id
+                        iconURL
+                        title
+                        meta {
+                            radio {
+                                advSec
+                                id
+                                spl
+                                zoneID
+                                gemiusID
+                            }
+                        }
+                        site {
+                            title
+                        }
+                    }
+                }
+            

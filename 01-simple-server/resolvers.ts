@@ -13,11 +13,17 @@ function sum2(_: any, { a, b }: { a: number, b: number }) {
   return a+b;
 }
 
+function minus(_: any, args: { a: number, b: number }) {
+  return args.a - args.b;
+}
+
+
 const resolvers = {
   Query: {
     sum2,
     helloWorld,
-    hello
+    hello,
+    minus
   },
 };
 
