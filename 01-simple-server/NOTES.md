@@ -54,4 +54,12 @@ export { resolvers };
 
 ```
 
-Next step: implement client for your GraphQL API service.
+Next step: 
+
+* easier access to GraphQL traffic in browser
+
+
+```bash
+cd /workspaces/graphql-workshop/01b-inspect
+code NOTES.md
+```
