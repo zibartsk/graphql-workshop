@@ -1,3 +1,8 @@
+###
+# simple GraphQL request
+# notice "pseudo header" X-REQUEST-TYPE: GraphQL
+#   REST client ext. helps us to build GraphQL req. body
+#
 POST http://0.0.0.0:8000/graphql
 Content-Type: application/json
 Authorization: Bearer xxx
@@ -8,6 +13,9 @@ X-REQUEST-TYPE: GraphQL
 }
 
 ###
+# simple request
+#   no "body builder used" - actual request
+#
 POST http://0.0.0.0:8000/graphql
 Content-Type: application/json
 Authorization: Bearer xxx
@@ -17,6 +25,28 @@ Authorization: Bearer xxx
 }
 
 ###
+#
+# VSCODE Ctrl-Shift-P: Rest Client: Copy request as cURL
+#
+
+
+# curl --request POST \
+#   --url http://0.0.0.0:8000/graphql \
+#   --header 'content-type: application/json' \
+#   --header 'user-agent: vscode-restclient' \
+#   --data '{"query": "{ helloWorld }"}'
+
+POST http://0.0.0.0:8000/graphql
+Content-Type: application/json
+
+{ 
+  "query": "{ helloWorld }"
+}
+
+###
+#
+# one may also use Chrome Dev Tools / Network / Copy as CURL to start
+#
 # curl 'http://0.0.0.0:8000/graphql' \
 #   -H 'Accept-Language: en-US,en' \
 #   -H 'Cache-Control: no-cache' \
@@ -32,6 +62,10 @@ Authorization: Bearer xxx
 #   --compressed \
 #   --insecure
 
+#
+# and translate to REST CLIENT "code": 
+#
+
 POST http://0.0.0.0:8000/graphql
 Content-Type: application/json
 
@@ -40,16 +74,22 @@ Content-Type: application/json
 }
 
 ###
-
+#
+# queries often include ARGUMENTS
+#    they may come hardcoded
+#
 POST http://0.0.0.0:8000/graphql
 Content-Type: application/json
 X-REQUEST-TYPE: GraphQL
 
 {
-  hello(name: "Space")
+  hello(name: "Universe")
 }
 
 ###
+#
+# GraphQL ARGUMENTS are often feeded from VARIABLES
+#
 # @name hello
 POST http://0.0.0.0:8000/graphql
 Content-Type: application/json
@@ -64,4 +104,12 @@ query hello($name: String!) {
 }
 
 ###
-@response = {{hello.response.body.data.hello}}
+#
+# GraphQL results might be acessed in REST client also later:
+#
+@greeting = {{hello.response.body.data.hello}}
+
+POST https://httpbin.org/post
+Content-Type: application/json
+
+{"greeting_was": "{{greeting}}"}
