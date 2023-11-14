@@ -27,6 +27,8 @@
 
 * single API URL and HTTP method used (POST)
 
+* KZ
+
 
 ### GraphQL server - real world example
 
