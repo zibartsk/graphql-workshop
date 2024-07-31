@@ -13,6 +13,22 @@ X-REQUEST-TYPE: GraphQL
 }
 
 ###
+# curl 'http://127.0.0.1:8000/graphql' \
+#   -H 'content-type: application/json' \
+#   --data-raw '{"query":"query MyQuery {\n  minus(a: 100, b: 10)\n}","operationName":"MyQuery","extensions":{}}'
+POST http://127.0.0.1:8000/graphql
+content-type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query MyQuery($a: Int!, $b: Int!) {
+  minus(a: $a, b: $b)
+  helloWorld
+}
+
+{ "a": 200, "b": 100 }
+
+
+###
 # simple request
 #   no "body builder used" - actual request
 #
