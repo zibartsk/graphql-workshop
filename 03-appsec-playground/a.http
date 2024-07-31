@@ -1,0 +1,31 @@
+###
+# @name login
+@apiKey={{$dotenv WAF_KEY}}
+@apiKeySecret={{$dotenv WAF_SECRET}}
+
+// https://github.com/mkol5222/appsec-publish-tf/blob/main/publish.tf#L4C1-L18C2
+POST https://cloudinfra-gw.portal.checkpoint.com/auth/external
+Content-Type: application/json
+
+{"clientId":"{{apiKey}}","accessKey":"{{apiKeySecret}}"}
+
+
+
+###
+@token = {{login.response.body.data.token}}
+
+POST https://cloudinfra-gw.portal.checkpoint.com/app/waf//graphql/V1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+X-REQUEST-TYPE: GraphQL
+
+query ExampleQuery {
+  getAssets(userDefined: true) {
+    status
+      assets {
+        id
+        name
+        state
+      }
+  }
+}
